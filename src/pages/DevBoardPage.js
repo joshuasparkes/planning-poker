@@ -92,22 +92,22 @@ const DevBoardPage = () => {
         {participantName && (
           <h3 className="text-lg text-left mt-2">{participantName}</h3>
         )}
-        <div className="bg-white p-4 shadow rounded">
+        <div className="bg-white p-4 border-2 rounded-lg">
           <h1 className="text-xl font-bold">Epic</h1>
           <div>{epic}</div> {/* Display the Epic content */}
         </div>
-        <div className="bg-white p-4 shadow rounded">
+        <div className="bg-white p-4 border-2 rounded-lg">
           <h2 className="text-lg font-semibold">Story</h2>
           <div>{story}</div> {/* Display the Story content */}
         </div>
-        <div className="bg-white p-4 shadow rounded">
+        <div className="bg-white p-4 border-2 rounded-lg">
           <h2 className="text-lg font-semibold">Task</h2>
           <div>{task}</div> {/* Display the Task content */}
         </div>
       </div>
 
       {/* Right Column */}
-      <div className="flex-1 p-5 space-y-4">
+      <div className="flex-1 flex items-center justify-center p-5">
         <div className="grid grid-cols-4 gap-4">
           {["1", "2", "3", "5", "8", "13", "20"].map((value) => (
             <div
@@ -116,7 +116,7 @@ const DevBoardPage = () => {
                 selectedValue === value ? "border-4" : "border"
               }`}
               style={{
-                borderColor: selectedValue === value ? "#333" : "#ddd", // Thicker border if selected
+                borderColor: selectedValue === value ? "#333" : "#ddd",
                 borderRadius: "8px",
                 backgroundColor: "#fff",
                 color: "#333",

@@ -27,6 +27,7 @@ const DLBoardPage = () => {
   const [participants, setParticipants] = useState([]);
   const [revealVotes, setRevealVotes] = useState(false);
   const [democraticVote, setDemocraticVote] = useState(null);
+  const [buttonText, setButtonText] = useState("Save");
 
   const handleSave = async () => {
     // Create a query against the collection.
@@ -45,6 +46,11 @@ const DLBoardPage = () => {
         });
 
         console.log("Board updated successfully");
+
+        setButtonText("Saved!");
+        setTimeout(() => {
+          setButtonText("Save");
+        }, 1000);
       } else {
         console.error("No document found with the code:", code);
       }
@@ -63,10 +69,12 @@ const DLBoardPage = () => {
           const docData = querySnapshot.docs[0].data();
           // Assuming docData.participants is an array of participant names
           // and docData.votes is an object with participant names as keys and votes as values
-          const updatedParticipants = docData.participants.map((name) => ({
-            name,
-            vote: docData.votes ? docData.votes[name] : null,
-          }));
+          const updatedParticipants = (docData.participants || []).map(
+            (name) => ({
+              name,
+              vote: docData.votes ? docData.votes[name] : null,
+            })
+          );
           setParticipants(updatedParticipants);
         } else {
           console.error("No document found with the code:", code);
@@ -118,17 +126,19 @@ const DLBoardPage = () => {
 
   const handleReveal = () => {
     setRevealVotes(true);
-  
+
     const voteCounts = participants.reduce((acc, participant) => {
       if (participant.vote) {
         acc[participant.vote] = (acc[participant.vote] || 0) + 1;
       }
       return acc;
     }, {});
-  
+
     const highestCount = Math.max(...Object.values(voteCounts));
-    const mostCommonVotes = Object.keys(voteCounts).filter((key) => voteCounts[key] === highestCount);
-  
+    const mostCommonVotes = Object.keys(voteCounts).filter(
+      (key) => voteCounts[key] === highestCount
+    );
+
     if (mostCommonVotes.length > 1) {
       setDemocraticVote("It's a draw");
     } else {
@@ -156,45 +166,63 @@ const DLBoardPage = () => {
           </button>
         </div>
         {/* Left Column */}
-        <div className="flex-1 p-5 space-y-4">
-          <div className="bg-white p-4 rounded">
-            <label htmlFor="epic" className="text-lg font-semibold block mb-2">
+        <div className="flex-1 p-5 space-y-0">
+          <div className="bg-white p-0 rounded-lg">
+            <label htmlFor="epic" className="text-lg font-semibold block mb-0">
               Epic
             </label>
             <textarea
               id="epic"
               value={epic}
               onChange={(e) => setEpic(e.target.value)}
-              className="w-full p-2 border border-gray-300 rounded"
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  e.preventDefault();
+                  handleSave();
+                }
+              }}
+              className="w-full p-2 border border-gray-300 rounded-lg"
             />
           </div>
-          <div className="bg-white p-4 rounded">
-            <label htmlFor="story" className="text-lg font-semibold block mb-2">
+          <div className="bg-white p-0 rounded">
+            <label htmlFor="story" className="text-lg font-semibold block mb-0">
               Story
             </label>
             <textarea
               id="story"
               value={story}
               onChange={(e) => setStory(e.target.value)}
-              className="w-full p-2 border border-gray-300 rounded"
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  e.preventDefault();
+                  handleSave();
+                }
+              }}
+              className="w-full p-2 border border-gray-300 rounded-lg"
             />
           </div>
-          <div className="bg-white p-4  rounded">
-            <label htmlFor="task" className="text-lg font-semibold block mb-2">
+          <div className="bg-white p-0  rounded">
+            <label htmlFor="task" className="text-lg font-semibold block mb-0">
               Task
             </label>
             <textarea
               id="task"
               value={task}
               onChange={(e) => setTask(e.target.value)}
-              className="w-full p-2 border border-gray-300 rounded"
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  e.preventDefault();
+                  handleSave();
+                }
+              }}
+              className="w-full p-2 border border-gray-300 rounded-lg"
             />
           </div>
           <button
             className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700"
             onClick={handleSave}
           >
-            Save <FontAwesomeIcon className="ml-3" icon={faSave} />
+            {buttonText} <FontAwesomeIcon className="ml-3" icon={faSave} />
           </button>
         </div>
       </div>
@@ -252,7 +280,9 @@ const DLBoardPage = () => {
         </div>
         {revealVotes && (
           <div className="mt-4 border-2 p-6 rounded-lg">
-            <span className="font-bold text-2xl">Democratic Vote: {democraticVote}</span>
+            <span className="font-bold text-2xl">
+              Democratic Vote: {democraticVote}
+            </span>
           </div>
         )}
       </div>
