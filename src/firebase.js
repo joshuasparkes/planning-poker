@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app";
-import { getFirestore, collection, addDoc, serverTimestamp } from "firebase/firestore";
+import { getFirestore, collection, addDoc, serverTimestamp, query, where, getDocs } from "firebase/firestore";
 import { getAnalytics } from "firebase/analytics";
 
 
@@ -17,4 +17,4 @@ const app = initializeApp(firebaseConfig);
 getAnalytics(app); 
 const db = getFirestore(app);
 
-export { db, serverTimestamp, collection, addDoc };
+export { db, serverTimestamp, collection, addDoc, query, where, getDocs };
