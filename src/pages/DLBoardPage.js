@@ -21,14 +21,6 @@ import {
 
 const DLBoardPage = () => {
   const { code } = useParams();
-  const [developers, setDevelopers] = useState(() => {
-    const savedDevelopers = localStorage.getItem(`developers_${code}`);
-    return savedDevelopers ? JSON.parse(savedDevelopers) : [];
-  });
-  const [votes, setVotes] = useState(() => {
-    const savedVotes = localStorage.getItem(`votes_${code}`);
-    return savedVotes ? JSON.parse(savedVotes) : {};
-  });
   const [task, setTask] = useState("");
   const [story, setStory] = useState("");
   const [epic, setEpic] = useState("");
@@ -124,38 +116,9 @@ const DLBoardPage = () => {
     }
   };
 
-  useEffect(() => {
-    localStorage.setItem(`developers_${code}`, JSON.stringify(developers));
-    localStorage.setItem(`votes_${code}`, JSON.stringify(votes));
-  }, [developers, votes, code]);
-
-  useEffect(() => {
-    const handleStorageChange = (e) => {
-      if (e.key === `votes_${code}`) {
-        setVotes(JSON.parse(e.newValue) || {});
-      }
-      if (e.key === `epic_${code}`) {
-        setEpic(e.newValue || "");
-      }
-      if (e.key === `story_${code}`) {
-        setStory(e.newValue || "");
-      }
-      if (e.key === `task_${code}`) {
-        setTask(e.newValue || "");
-      }
-    };
-
-    window.addEventListener("storage", handleStorageChange);
-
-    return () => {
-      window.removeEventListener("storage", handleStorageChange);
-    };
-  }, [code]); // Only re-run the effect if the code changes
-
   const handleReveal = () => {
     setRevealVotes(true);
   
-    // Calculate the vote counts
     const voteCounts = participants.reduce((acc, participant) => {
       if (participant.vote) {
         acc[participant.vote] = (acc[participant.vote] || 0) + 1;
@@ -163,16 +126,12 @@ const DLBoardPage = () => {
       return acc;
     }, {});
   
-    // Find the highest vote count
     const highestCount = Math.max(...Object.values(voteCounts));
-    // Filter the votes that have the highest count
     const mostCommonVotes = Object.keys(voteCounts).filter((key) => voteCounts[key] === highestCount);
   
-    // Check if there is a draw
     if (mostCommonVotes.length > 1) {
       setDemocraticVote("It's a draw");
     } else {
-      // Set the most common vote
       setDemocraticVote(mostCommonVotes[0] || null);
     }
   };
