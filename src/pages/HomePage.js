@@ -1,6 +1,14 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { db, serverTimestamp, collection, addDoc, query, where, getDocs } from "../firebase"; // Import the necessary functions
+import {
+  db,
+  serverTimestamp,
+  collection,
+  addDoc,
+  query,
+  where,
+  getDocs,
+} from "../firebase"; // Import the necessary functions
 
 const HomePage = () => {
   const navigate = useNavigate();
@@ -49,7 +57,7 @@ const HomePage = () => {
         <span className="text-2xl ">Pascal Planning Poker</span>
       </h1>
       <button
-        type="button" // Explicitly specify the button type
+        type="button"
         className="bg-black text-white font-semibold py-2 px-4 rounded-lg w-full mb-4 hover:bg-gray-700 focus:outline-none"
         onClick={handleCreateBoard}
       >
