@@ -38,7 +38,7 @@ const DevBoardPage = () => {
         }
       },
       (error) => {
-        console.error("Error listening to board data: ", error);
+        console.error("Error listening  to board data: ", error);
       }
     );
     return () => unsubscribe();
