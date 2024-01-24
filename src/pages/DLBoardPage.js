@@ -12,8 +12,10 @@ import {
 import { db } from "../firebase";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
+  faCheck,
   faCopy,
   faEye,
+  faQuestion,
   faRefresh,
   faSave,
   faTrash,
@@ -146,9 +148,34 @@ const DLBoardPage = () => {
     }
   };
 
-  const handleReset = () => {
+  const handleReset = async () => {
     setRevealVotes(false);
     setDemocraticVote(null);
+  
+    // Create a query against the collection.
+    const q = query(collection(db, "boards"), where("code", "==", code));
+  
+    try {
+      const querySnapshot = await getDocs(q);
+      if (!querySnapshot.empty) {
+        // Assuming 'code' is unique, there should only be one matching document.
+        const docRef = querySnapshot.docs[0].ref;
+  
+        // Reset the votes for each participant.
+        const updates = {
+          votes: {}, // Reset the entire votes object
+        };
+  
+        // Update the document to reset the votes.
+        await updateDoc(docRef, updates);
+  
+        console.log("Votes reset successfully");
+      } else {
+        console.error("No document found with the code:", code);
+      }
+    } catch (error) {
+      console.error("Error resetting votes: ", error);
+    }
   };
 
   return (
@@ -243,25 +270,31 @@ const DLBoardPage = () => {
               </tr>
             </thead>
             <tbody>
-              {participants.map((participant) => (
-                <tr key={participant.name}>
-                  <td className="border-b border-gray-300 p-4">
-                    {participant.name}
-                  </td>
-                  <td className="border-b border-gray-300 p-4">
-                    {revealVotes ? participant.vote : "?"}
-                  </td>
-                  <td className="border-b border-gray-300 p-4">
-                    <button
-                      className=" text-red-500 p-2 rounded hover:text-red-700"
-                      onClick={() => handleDeleteParticipant(participant.name)}
-                    >
-                      <FontAwesomeIcon icon={faTrash} />
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
+  {participants.map((participant) => (
+    <tr key={participant.name}>
+      <td className="border-b border-gray-300 p-4">
+        {participant.name}
+      </td>
+      <td className="border-b border-gray-300 p-4 text-center">
+        {revealVotes ? (
+          participant.vote
+        ) : participant.vote ? (
+          <FontAwesomeIcon icon={faCheck} className="text-green-500" />
+        ) : (
+          <FontAwesomeIcon icon={faQuestion} className="text-gray-500" />
+        )}
+      </td>
+      <td className="border-b border-gray-300 p-4">
+        <button
+          className=" text-red-500 p-2 rounded hover:text-red-700"
+          onClick={() => handleDeleteParticipant(participant.name)}
+        >
+          <FontAwesomeIcon icon={faTrash} />
+        </button>
+      </td>
+    </tr>
+  ))}
+</tbody>
           </table>
         </div>
         <div className="flex justify-end space-x-2">

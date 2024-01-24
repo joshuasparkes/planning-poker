@@ -28,21 +28,24 @@ const DevBoardPage = () => {
       q,
       (querySnapshot) => {
         if (!querySnapshot.empty) {
-          // Assuming 'code' is unique, there should only be one matching document.
           const data = querySnapshot.docs[0].data();
           setEpic(data.epic || "");
           setStory(data.story || "");
           setTask(data.task || "");
+          // Reset selectedValue if the votes have been reset
+          if (data.votes && !data.votes[participantName]) {
+            setSelectedValue(null);
+          }
         } else {
           console.log("No such document!");
         }
       },
       (error) => {
-        console.error("Error listening  to board data: ", error);
+        console.error("Error listening to board data: ", error);
       }
     );
     return () => unsubscribe();
-  }, [code]);
+  }, [code, participantName]);
 
   const handleNameSubmit = async () => {
     if (userName.trim() === "") {
