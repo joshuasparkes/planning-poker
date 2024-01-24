@@ -151,24 +151,24 @@ const DLBoardPage = () => {
   const handleReset = async () => {
     setRevealVotes(false);
     setDemocraticVote(null);
-  
+
     // Create a query against the collection.
     const q = query(collection(db, "boards"), where("code", "==", code));
-  
+
     try {
       const querySnapshot = await getDocs(q);
       if (!querySnapshot.empty) {
         // Assuming 'code' is unique, there should only be one matching document.
         const docRef = querySnapshot.docs[0].ref;
-  
+
         // Reset the votes for each participant.
         const updates = {
           votes: {}, // Reset the entire votes object
         };
-  
+
         // Update the document to reset the votes.
         await updateDoc(docRef, updates);
-  
+
         console.log("Votes reset successfully");
       } else {
         console.error("No document found with the code:", code);
@@ -255,48 +255,8 @@ const DLBoardPage = () => {
       </div>
 
       {/* Right Column */}
-      <div className="flex-1 p-5 space-y-4">
-        <div className="bg-white p-4 shadow rounded">
-          <table className="w-full">
-            <thead>
-              <tr>
-                <th className="border-b-2 border-gray-300 p-4 text-center">
-                  Engineer
-                </th>
-                <th className="border-b-2 border-gray-300 p-4 text-center">
-                  Vote
-                </th>
-                <th className="border-b-2 border-gray-300 p-4 text-center"></th>
-              </tr>
-            </thead>
-            <tbody>
-  {participants.map((participant) => (
-    <tr key={participant.name}>
-      <td className="border-b border-gray-300 p-4">
-        {participant.name}
-      </td>
-      <td className="border-b border-gray-300 p-4 text-center">
-        {revealVotes ? (
-          participant.vote
-        ) : participant.vote ? (
-          <FontAwesomeIcon icon={faCheck} className="text-green-500" />
-        ) : (
-          <FontAwesomeIcon icon={faQuestion} className="text-gray-500" />
-        )}
-      </td>
-      <td className="border-b border-gray-300 p-4">
-        <button
-          className=" text-red-500 p-2 rounded hover:text-red-700"
-          onClick={() => handleDeleteParticipant(participant.name)}
-        >
-          <FontAwesomeIcon icon={faTrash} />
-        </button>
-      </td>
-    </tr>
-  ))}
-</tbody>
-          </table>
-        </div>
+      <div className="flex-1 p-5 space-y-2">
+        <div className="bg-white p-2 rounded">
         <div className="flex justify-end space-x-2">
           <button
             className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-700"
@@ -311,6 +271,53 @@ const DLBoardPage = () => {
             Reset <FontAwesomeIcon className="ml-3" icon={faRefresh} />
           </button>
         </div>
+          <table className="w-full">
+            <thead>
+              <tr>
+                <th className="border-b-2 border-gray-300 px-4 text-center">
+                  Engineer
+                </th>
+                <th className="border-b-2 border-gray-300 p-4 text-center">
+                  Vote
+                </th>
+                <th className="border-b-2 border-gray-300 p-4 text-center"></th>
+              </tr>
+            </thead>
+            <tbody>
+              {participants.map((participant) => (
+                <tr key={participant.name}>
+                  <td className="border-b border-gray-300 px-4">
+                    {participant.name}
+                  </td>
+                  <td className="border-b border-gray-300 px-4 text-center">
+                    {revealVotes ? (
+                      participant.vote
+                    ) : participant.vote ? (
+                      <FontAwesomeIcon
+                        icon={faCheck}
+                        className="text-green-500"
+                      />
+                    ) : (
+                      <FontAwesomeIcon
+                        icon={faQuestion}
+                        className="text-gray-500"
+                      />
+                    )}
+                  </td>
+                  <td className="border-b border-gray-300 px-4">
+                    <button
+                      className=" text-red-500 p-2 rounded hover:text-red-700"
+                      onClick={() => handleDeleteParticipant(participant.name)}
+                    >
+                      <FontAwesomeIcon icon={faTrash} />
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+       
         {revealVotes && (
           <div className="mt-4 border-2 p-6 rounded-lg">
             <span className="font-bold text-2xl">
