@@ -10,7 +10,13 @@ import {
   arrayUnion,
 } from "firebase/firestore";
 import { db } from "../firebase";
-import reubenImage from '../images/reuben.png'
+import reubenImage from "../images/reuben.png";
+import aramImage from "../images/aram.png"; // Import aram.png
+import joshImage from "../images/josh.png"; // Import josh.png
+import jorgeImage from "../images/jorge.png"; // Import josh.png
+import justinImage from "../images/justin.png"; // Import josh.png
+import jeremyImage from "../images/jeremy.png"; // Import josh.png
+import nickImage from "../images/nick.jpg"; // Import josh.png
 
 const DevBoardPage = () => {
   const { code } = useParams();
@@ -21,6 +27,16 @@ const DevBoardPage = () => {
   const [userName, setUserName] = useState("");
   const [participantName, setParticipantName] = useState("");
   const [selectedValue, setSelectedValue] = useState(null);
+
+  const valueToImageMap = {
+    1: reubenImage,
+    2: jorgeImage,
+    3: nickImage,
+    5: jeremyImage,
+    8: justinImage,
+    13: aramImage,
+    20: joshImage,
+  };
 
   useEffect(() => {
     const q = query(collection(db, "boards"), where("code", "==", code));
@@ -112,37 +128,37 @@ const DevBoardPage = () => {
 
       {/* Right Column */}
       <div className="flex-1 flex items-center justify-center p-5">
-    <div className="grid grid-cols-4 gap-4">
-      {["1", "2", "3", "5", "8", "13", "20"].map((value) => (
-        <div
-          key={value}
-          className={`bg-white p-4 shadow-lg rounded cursor-pointer hover:bg-blue-100 transform transition duration-300 ${
-            selectedValue === value ? "border-4" : "border"
-          }`}
-          style={{
-            borderColor: selectedValue === value ? "#333" : "#ddd",
-            borderRadius: "8px",
-            backgroundColor: "#fff",
-            color: "#333",
-            boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "center",
-            alignItems: "center",
-            height: "200px",
-            aspectRatio: "1 / 1.4",
-          }}
-          onClick={() => handleCardClick(value)}
-        >
-          {selectedValue === value ? (
-            <img src={reubenImage} alt="Reuben" className="max-h-full" />
-          ) : (
-            <div className="text-center text-xl font-semibold">{value}</div>
-          )}
+        <div className="grid grid-cols-4 gap-4">
+          {["1", "2", "3", "5", "8", "13", "20"].map((value) => (
+            <div
+              key={value}
+              className={`bg-white p-4 shadow-lg rounded cursor-pointer hover:bg-blue-100 transform transition duration-300 ${
+                selectedValue === value ? "border-4" : "border"
+              }`}
+              style={{
+                borderColor: selectedValue === value ? "#333" : "#ddd",
+                borderRadius: "8px",
+                backgroundColor: "#fff",
+                color: "#333",
+                boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+                alignItems: "center",
+                height: "200px",
+                aspectRatio: "1 / 1.4",
+              }}
+              onClick={() => handleCardClick(value)}
+            >
+              {selectedValue === value && valueToImageMap[value] ? (
+                <img src={valueToImageMap[value]} alt={value} className="max-h-full" />
+              ) : (
+                <div className="text-center text-xl font-semibold">{value}</div>
+              )}
+            </div>
+          ))}
         </div>
-      ))}
-    </div>
-  </div>
+      </div>
       {showModal && (
         <div
           className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full"
