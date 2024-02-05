@@ -19,7 +19,11 @@ import jorgeImage from "../images/jorge.png"; // Import josh.png
 import justinImage from "../images/justin.png"; // Import josh.png
 import jeremyImage from "../images/jeremy.png"; // Import josh.png
 import nickImage from "../images/nick.jpg"; // Import josh.png
-import { faBug, faEnvelope, faPaperPlane, faVoteYea } from "@fortawesome/free-solid-svg-icons";
+import {
+  faBug,
+  faPaperPlane,
+  faVoteYea,
+} from "@fortawesome/free-solid-svg-icons";
 import FeatureRequestModal from "../components/FeatureRequestModal"; // Adjust the path as necessary
 
 const DevBoardPage = () => {
@@ -204,7 +208,8 @@ const DevBoardPage = () => {
               type="submit"
               className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded h-10" // Added h-10 for consistent height
             >
-              Post to Feed <FontAwesomeIcon className="ml-4" icon={faPaperPlane} />
+              Post to Feed{" "}
+              <FontAwesomeIcon className="ml-4" icon={faPaperPlane} />
             </button>
           </form>
         </div>
