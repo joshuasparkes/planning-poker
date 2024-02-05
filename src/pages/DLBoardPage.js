@@ -30,6 +30,21 @@ const DLBoardPage = () => {
   const [revealVotes, setRevealVotes] = useState(false);
   const [democraticVote, setDemocraticVote] = useState(null);
   const [buttonText, setButtonText] = useState("Save");
+  const [messages, setMessages] = useState([]);
+
+  useEffect(() => {
+    const q = query(collection(db, "messages"), where("boardId", "==", code));
+
+    const unsubscribe = onSnapshot(q, (querySnapshot) => {
+      const newMessages = [];
+      querySnapshot.forEach((doc) => {
+        newMessages.push(doc.data());
+      });
+      setMessages(newMessages);
+    });
+
+    return () => unsubscribe();
+  }, [code]);
 
   const handleSave = async () => {
     // Create a query against the collection.
@@ -179,9 +194,9 @@ const DLBoardPage = () => {
   };
 
   return (
-    <div className="flex h-screen">
+    <div className="flex h-screen bg-slate-50">
       {/* Header */}
-      <div className="p-5 w-1/2 bg-white shadow">
+      <div className="p-5 w-1/2 bg-slate-50 bg-white shadow">
         <div className="flex justify-between flex-col items-start">
           <h1 className="text-2xl font-bold">Board Code: {code}</h1>
           <button
@@ -194,7 +209,7 @@ const DLBoardPage = () => {
         </div>
         {/* Left Column */}
         <div className="flex-1 p-5 space-y-0">
-          <div className="bg-white p-0 rounded-lg">
+          <div className=" p-0 rounded-lg">
             <label htmlFor="epic" className="text-lg font-semibold block mb-0">
               Epic
             </label>
@@ -211,7 +226,7 @@ const DLBoardPage = () => {
               className="w-full p-2 border border-gray-300 rounded-lg"
             />
           </div>
-          <div className="bg-white p-0 rounded">
+          <div className=" p-0 rounded">
             <label htmlFor="story" className="text-lg font-semibold block mb-0">
               Story
             </label>
@@ -228,7 +243,7 @@ const DLBoardPage = () => {
               className="w-full p-2 border border-gray-300 rounded-lg"
             />
           </div>
-          <div className="bg-white p-0  rounded">
+          <div className=" p-0  rounded">
             <label htmlFor="task" className="text-lg font-semibold block mb-0">
               Task
             </label>
@@ -256,22 +271,22 @@ const DLBoardPage = () => {
 
       {/* Right Column */}
       <div className="flex-1 p-5 space-y-2">
-        <div className="bg-white p-2 rounded">
-        <div className="flex justify-end space-x-2">
-          <button
-            className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-700"
-            onClick={handleReveal}
-          >
-            Reveal <FontAwesomeIcon className="ml-3" icon={faEye} />
-          </button>
-          <button
-            className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-700"
-            onClick={handleReset}
-          >
-            Reset <FontAwesomeIcon className="ml-3" icon={faRefresh} />
-          </button>
-        </div>
-          <table className="w-full">
+        <div className=" p-2 rounded">
+          <div className="flex justify-end mb-2 space-x-2">
+            <button
+              className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-700"
+              onClick={handleReveal}
+            >
+              Reveal <FontAwesomeIcon className="ml-3" icon={faEye} />
+            </button>
+            <button
+              className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-700"
+              onClick={handleReset}
+            >
+              Reset <FontAwesomeIcon className="ml-3" icon={faRefresh} />
+            </button>
+          </div>
+          <table className="w-full bg-white">
             <thead>
               <tr>
                 <th className="border-b-2 border-gray-300 px-4 text-center">
@@ -317,14 +332,30 @@ const DLBoardPage = () => {
             </tbody>
           </table>
         </div>
-       
+
         {revealVotes && (
-          <div className="mt-4 border-2 p-6 rounded-lg">
-            <span className="font-bold text-2xl">
+          <div className="mt-4 border bg-white p-2 rounded-lg">
+            <span className="font-bold  text-lg">
               Democratic Vote: {democraticVote}
             </span>
           </div>
         )}
+        <div
+          className="mt-auto p-2 bg-slate-800 border rounded-lg"
+          style={{ maxHeight: "45%", overflowY: "auto" }}
+        >
+          <div className="text-lg text-white font-bold">Feed</div>
+          <ul>
+            {messages.map((message, index) => (
+              <li
+                className="border w-fit bg-slate-50 rounded-lg mx-3 my-1 text-left p-2"
+                key={index}
+              >
+                {message.message}
+              </li>
+            ))}
+          </ul>
+        </div>
       </div>
     </div>
   );

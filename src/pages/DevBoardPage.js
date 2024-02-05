@@ -6,6 +6,7 @@ import {
   query,
   where,
   onSnapshot,
+  addDoc,
   updateDoc,
   getDocs,
   arrayUnion,
@@ -18,7 +19,7 @@ import jorgeImage from "../images/jorge.png"; // Import josh.png
 import justinImage from "../images/justin.png"; // Import josh.png
 import jeremyImage from "../images/jeremy.png"; // Import josh.png
 import nickImage from "../images/nick.jpg"; // Import josh.png
-import { faBug, faVoteYea } from "@fortawesome/free-solid-svg-icons";
+import { faBug, faEnvelope, faPaperPlane, faVoteYea } from "@fortawesome/free-solid-svg-icons";
 import FeatureRequestModal from "../components/FeatureRequestModal"; // Adjust the path as necessary
 
 const DevBoardPage = () => {
@@ -31,6 +32,20 @@ const DevBoardPage = () => {
   const [participantName, setParticipantName] = useState("");
   const [selectedValue, setSelectedValue] = useState(null);
   const [showFeatureModal, setShowFeatureModal] = useState(false);
+  const [message, setMessage] = useState("");
+
+  const sendMessage = async (e) => {
+    e.preventDefault(); // Prevent the form from refreshing the page
+    if (message.trim() === "") return; // Ignore empty messages
+
+    await addDoc(collection(db, "messages"), {
+      boardId: code,
+      message: message,
+      readStatus: false,
+    });
+
+    setMessage(""); // Clear the input field after sending
+  };
 
   const valueToImageMap = {
     1: reubenImage,
@@ -113,7 +128,9 @@ const DevBoardPage = () => {
       {/* Left Column */}
       <div className="flex-1 p-5">
         {participantName && (
-          <div className="text-4xl text-left mb-4">Welcome, {participantName}.</div>
+          <div className="text-4xl text-left mb-4">
+            Welcome, {participantName}.
+          </div>
         )}
         <div className="text-lg text-left font-light">Board: {code}</div>
         <div className="relative bg-white p-4 border-2 rounded-lg mt-8">
@@ -173,10 +190,27 @@ const DevBoardPage = () => {
           ))}
         </div>
       </div>
-      <div className="absolute top-0 right-0 p-4 flex">
+      <div className="absolute top-0 right-0 p-4 flex items-center">
+        <div className="border-2 p-1 mr-4 rounded-lg">
+          <form onSubmit={sendMessage} className="flex justify-between p-4">
+            <input
+              type="text"
+              value={message}
+              onChange={(e) => setMessage(e.target.value)}
+              placeholder="Type a message..."
+              className="flex-1 mr-4 p-2 border-2 rounded-lg h-10" // Added h-10 for consistent height
+            />
+            <button
+              type="submit"
+              className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded h-10" // Added h-10 for consistent height
+            >
+              Post to Feed <FontAwesomeIcon className="ml-4" icon={faPaperPlane} />
+            </button>
+          </form>
+        </div>
         <a
           href="mailto:reuben.t@snowfalltravel.com?subject=Please please help me Reuben"
-          className="bg-red-500 mr-4 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-l"
+          className="bg-red-500 mr-4 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-l h-10" // Added h-10 for consistent height
           style={{ textDecoration: "none" }}
         >
           Report a Bug
@@ -184,7 +218,7 @@ const DevBoardPage = () => {
         </a>
         <button
           onClick={() => setShowFeatureModal(true)}
-          className="bg-blue-500 hover:bg-blue-900 text-white font-bold py-2 px-4 rounded-r"
+          className="bg-blue-500 hover:bg-blue-900 text-white font-bold py-2 px-4 rounded-r h-10" // Added h-10 for consistent height
         >
           Request a Feature
           <FontAwesomeIcon className="ml-4" icon={faVoteYea} />
