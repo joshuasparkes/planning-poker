@@ -21,6 +21,7 @@ import jeremyImage from "../images/jeremy.png"; // Import josh.png
 import nickImage from "../images/nick.jpg"; // Import josh.png
 import {
   faBug,
+  faChevronRight,
   faPaperPlane,
   faVoteYea,
 } from "@fortawesome/free-solid-svg-icons";
@@ -132,26 +133,36 @@ const DevBoardPage = () => {
       {/* Left Column */}
       <div className="flex-1 p-5">
         {participantName && (
-          <div className="text-4xl text-left mb-4">
-            Welcome, {participantName}.
-          </div>
+          <div className="text-4xl text-left">Welcome, {participantName}.</div>
         )}
-        <div className="text-lg text-left font-light">Board: {code}</div>
+        <div className="text-sm text-gray text-left font-light">
+          Board: {code}
+        </div>
+        <div className="text-left mt-2 bg-slate-800 text-white font-bold border rounded-lg p-2">
+          {" "}
+          <span>
+            Click a card to vote on the complexity of the task being discussed{" "}
+            <FontAwesomeIcon className="ml-2" icon={faChevronRight} />
+          </span>{" "}
+          <span className="text-sm font-normal">
+            If unsure, let the team know!
+          </span>
+        </div>
         <div className="relative bg-white p-4 border-2 rounded-lg mt-8">
-          <h1 className="absolute top-[-1rem] left-2 bg-white px-2 text-xl font-bold">
-            Epic
-          </h1>
+          <h2 className="absolute top-[-1rem] left-2 bg-white px-2 text-lg font-semibold">
+            Outcome
+          </h2>
           <div>{epic}</div> {/* Display the Epic content */}
         </div>
         <div className="relative bg-white p-4 border-2 rounded-lg mt-8">
           <h2 className="absolute top-[-1rem] left-2 bg-white px-2 text-lg font-semibold">
-            Story
+            Epic
           </h2>
           <div>{story}</div> {/* Display the Story content */}
         </div>
         <div className="relative bg-white p-4 border-2 rounded-lg mt-8">
           <h2 className="absolute top-[-1rem] left-2 bg-white px-2 text-lg font-semibold">
-            Task
+            Issue
           </h2>
           <div>{task}</div> {/* Display the Task content */}
         </div>
@@ -182,11 +193,16 @@ const DevBoardPage = () => {
               onClick={() => handleCardClick(value)}
             >
               {selectedValue === value && valueToImageMap[value] ? (
-                <img
-                  src={valueToImageMap[value]}
-                  alt={value}
-                  className="max-h-full"
-                />
+                <>
+                  <img
+                    src={valueToImageMap[value]}
+                    alt={value}
+                    className="max-h-full"
+                  />
+                  <div className="text-center text-xl font-semibold">
+                    Voted!
+                  </div>
+                </>
               ) : (
                 <div className="text-center text-xl font-semibold">{value}</div>
               )}

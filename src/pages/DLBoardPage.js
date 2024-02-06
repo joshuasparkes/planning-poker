@@ -211,7 +211,7 @@ const DLBoardPage = () => {
         <div className="flex-1 p-5 space-y-0">
           <div className=" p-0 rounded-lg">
             <label htmlFor="epic" className="text-lg font-semibold block mb-0">
-              Epic
+              Outcome
             </label>
             <textarea
               id="epic"
@@ -228,7 +228,7 @@ const DLBoardPage = () => {
           </div>
           <div className=" p-0 rounded">
             <label htmlFor="story" className="text-lg font-semibold block mb-0">
-              Story
+              Epic
             </label>
             <textarea
               id="story"
@@ -245,7 +245,7 @@ const DLBoardPage = () => {
           </div>
           <div className=" p-0  rounded">
             <label htmlFor="task" className="text-lg font-semibold block mb-0">
-              Task
+              Issue
             </label>
             <textarea
               id="task"
