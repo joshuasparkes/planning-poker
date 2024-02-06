@@ -194,25 +194,23 @@ const DevBoardPage = () => {
           ))}
         </div>
       </div>
-      <div className="absolute top-0 right-0 p-4 flex items-center">
-        <div className="border-2 p-1 mr-4 rounded-lg">
-          <form onSubmit={sendMessage} className="flex justify-between p-4">
-            <input
-              type="text"
-              value={message}
-              onChange={(e) => setMessage(e.target.value)}
-              placeholder="Type a message..."
-              className="flex-1 mr-4 p-2 border-2 rounded-lg h-10" // Added h-10 for consistent height
-            />
-            <button
-              type="submit"
-              className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded h-10" // Added h-10 for consistent height
-            >
-              Post to Feed{" "}
-              <FontAwesomeIcon className="ml-4" icon={faPaperPlane} />
-            </button>
-          </form>
-        </div>
+      <div className="absolute top-0 right-0 p-4 flex items-start">
+        <form onSubmit={sendMessage} className="flex justify-between mr-4">
+          <input
+            type="text"
+            value={message}
+            onChange={(e) => setMessage(e.target.value)}
+            placeholder="Type a message..."
+            className="flex-1 mr-4 p-2 border-2 rounded-lg h-10" // Added h-10 for consistent height
+          />
+          <button
+            type="submit"
+            className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded h-10" // Added h-10 for consistent height
+          >
+            Post to Feed{" "}
+            <FontAwesomeIcon className="ml-4" icon={faPaperPlane} />
+          </button>
+        </form>
         <a
           href="mailto:reuben.t@snowfalltravel.com?subject=Please please help me Reuben"
           className="bg-red-500 mr-4 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-l h-10" // Added h-10 for consistent height
@@ -229,6 +227,7 @@ const DevBoardPage = () => {
           <FontAwesomeIcon className="ml-4" icon={faVoteYea} />
         </button>
       </div>
+
       <FeatureRequestModal
         showModal={showFeatureModal}
         setShowModal={setShowFeatureModal}

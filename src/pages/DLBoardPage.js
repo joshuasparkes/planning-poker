@@ -346,14 +346,16 @@ const DLBoardPage = () => {
         >
           <div className="text-lg text-white font-bold">Feed</div>
           <ul>
-            {messages.map((message, index) => (
-              <li
-                className="border w-fit bg-slate-50 rounded-lg mx-3 my-1 text-left p-2"
-                key={index}
-              >
-                {message.message}
-              </li>
-            ))}
+            {messages
+              .sort((a, b) => b.createdAt - a.createdAt) // Sort messages by creation timestamp in descending order
+              .map((message, index) => (
+                <li
+                  className="border w-fit bg-slate-50 rounded-lg mx-3 my-1 text-left p-2"
+                  key={index}
+                >
+                  {message.message}
+                </li>
+              ))}
           </ul>
         </div>
       </div>
