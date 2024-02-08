@@ -64,6 +64,9 @@ const FeatureRequestModal = ({ showModal, setShowModal }) => {
 
   if (!showModal) return null;
 
+  // Sort features by number of votes in descending order
+  const sortedFeatures = features.slice().sort((a, b) => b.votes - a.votes);
+
   return (
     <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full flex justify-center items-center">
       <div className="relative w-7/12 h-5/6 bg-white p-5 rounded shadow-lg">
@@ -90,14 +93,14 @@ const FeatureRequestModal = ({ showModal, setShowModal }) => {
 
         <div className="flex-grow flex items-center justify-center">
           <ul className=" w-full">
-            {features.map((feature) => (
+            {sortedFeatures.map((feature) => (
               <li
                 key={feature.id}
                 className="mt-2 flex justify-between items-center border w-3/4 p-2 rounded-lg mx-auto"
               >
-                <span className="text-left">{feature.name}</span>{" "}
-                {feature.votes}
+                <span className="text-left">{feature.name}</span>
                 <div>
+                <span className="bg-slate-600 text-white rounded-full px-3 py-2 font-bold">{feature.votes}</span>
                   <button
                     disabled={votedFeatures.has(feature.id)}
                     onClick={() => handleVote(feature.id, 1)}
