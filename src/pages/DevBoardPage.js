@@ -38,6 +38,7 @@ const DevBoardPage = () => {
   const [selectedValue, setSelectedValue] = useState(null);
   const [showFeatureModal, setShowFeatureModal] = useState(false);
   const [message, setMessage] = useState("");
+  const [selectedImage, setSelectedImage] = useState(null);
 
   const sendMessage = async (e) => {
     e.preventDefault(); // Prevent the form from refreshing the page
@@ -114,6 +115,12 @@ const DevBoardPage = () => {
     }
 
     setSelectedValue(value); // Set the selected value
+
+    const imageKeys = Object.keys(valueToImageMap);
+    const randomKey = imageKeys[Math.floor(Math.random() * imageKeys.length)];
+    const randomImage = valueToImageMap[randomKey];
+
+    setSelectedImage(randomImage);
 
     const q = query(collection(db, "boards"), where("code", "==", code));
     const querySnapshot = await getDocs(q);
@@ -192,11 +199,11 @@ const DevBoardPage = () => {
               }}
               onClick={() => handleCardClick(value)}
             >
-              {selectedValue === value && valueToImageMap[value] ? (
+              {selectedValue === value && selectedImage ? (
                 <>
                   <img
-                    src={valueToImageMap[value]}
-                    alt={value}
+                    src={selectedImage}
+                    alt="Selected"
                     className="max-h-full"
                   />
                   <div className="text-center text-xl font-semibold">
